@@ -1,0 +1,4 @@
+rootProject.name = 'owo-java'
+include 'jre8'
+include 'jre7'
+

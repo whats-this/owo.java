@@ -1,0 +1,33 @@
+group 'me.bramhaag'
+version '1.1-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'idea'
+
+allprojects {
+    group 'me.bramhaag'
+    version '1.1-SNAPSHOT'
+
+    apply plugin: 'java'
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        compile 'com.squareup.retrofit2:retrofit:2.2.0'
+        compile 'com.squareup.retrofit2:converter-scalars:2.2.0'
+        compile 'com.squareup.retrofit2:converter-gson:2.2.0'
+        compile 'com.google.code.gson:gson:2.8.0'
+
+        compileOnly "org.projectlombok:lombok:1.16.14"
+    }
+
+    sourceSets {
+        main {
+            java {
+                srcDir 'src'
+            }
+        }
+    }
+}
