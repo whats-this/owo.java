@@ -33,6 +33,39 @@ owo.shorten("http://my_domain.com").execute(url -> System.out.println("Shortened
 owo.upload(new File("my_image.png")).execute(file -> System.out.println("Image URL: " + file.getUrl()), throwable -> /* handle error */);
 ```
 
+## Download
+Maven:
+```xml
+<repositories>
+    <repository>
+        <id>bramhaag</id>
+        <url>http://bramhagens.me:8081/repository/maven-public/</url>
+    </repository>
+</repositories>
+
+<dependencies>
+    <dependency>
+        <groupId>me.bramhaag</groupId>
+        <!-- Note that you can also use owo-java-jre7 if you're running on Java 7 -->
+        <artifactId>owo-java-jre8</artifactId>
+        <version>1.1-SNAPSHOT</version>
+    </dependency>
+</dependencies>
+```
+Gradle:
+```groovy
+repositories {
+    maven { url "http://bramhagens.me:8081/repository/maven-public/" }
+}
+
+dependencies {
+    //Note that you can also use owo-java-jre7 if you're running on Java 7
+    compile 'me.bramhaag:owo-java-jre8:1.1-SNAPSHOT'
+}
+```
+
+Or you can build the jar yourself (see below)
+
 ## How to build
 ##### With dependencies
 1. Run `gradlew shadowJar` in project's root.
@@ -47,5 +80,5 @@ but that is not likely to happen. I do recommend to use the jre8 version, unless
 
 
 ## TODO
-- Maven repo
+- ~~Maven repo~~
 - Javadoc

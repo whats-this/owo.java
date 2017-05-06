@@ -2,13 +2,13 @@ group 'me.bramhaag'
 version '1.1-SNAPSHOT'
 
 apply plugin: 'java'
-apply plugin: 'idea'
 
-allprojects {
+subprojects {
     group 'me.bramhaag'
     version '1.1-SNAPSHOT'
 
     apply plugin: 'java'
+    apply plugin: 'maven'
 
     repositories {
         mavenCentral()
@@ -27,6 +27,42 @@ allprojects {
         main {
             java {
                 srcDir 'src'
+            }
+        }
+    }
+
+    task javadocJar(type: Jar, dependsOn: javadoc) {
+        from sourceSets.main.allJava
+        classifier = 'javadoc'
+    }
+
+    task sourcesJar(type: Jar) {
+        classifier = 'sources'
+        from sourceSets.main.allSource
+    }
+
+    artifacts {
+        archives jar
+
+        archives javadocJar
+        archives sourcesJar
+    }
+
+    uploadArchives {
+        repositories {
+            mavenDeployer {
+                repository(url: "${nexusUrl}/repository/maven-releases/") {
+                    authentication(userName: nexusUsername, password: nexusPassword)
+                }
+                snapshotRepository(url: "${nexusUrl}/repository/maven-snapshots") {
+                    authentication(userName: nexusUsername, password: nexusPassword)
+                }
+
+                addFilter('jre7') { artifact, file -> artifact.name == 'jre7' }
+                addFilter('jre8') { artifact, file -> artifact.name == 'jre8' }
+
+                pom('jre7').artifactId = 'owo-java-jre7'
+                pom('jre8').artifactId = 'owo-java-jre8'
             }
         }
     }
