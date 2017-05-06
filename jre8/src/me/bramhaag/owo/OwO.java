@@ -15,6 +15,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import org.apache.tika.Tika;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
@@ -28,6 +29,9 @@ public class OwO {
 
     @NonNull
     private OwOService service;
+
+    @NonNull
+    private Tika tika;
 
     /**
      * @param key OwO API key
@@ -50,20 +54,40 @@ public class OwO {
                 .build();
 
         this.service = retrofit.create(OwOService.class);
+        this.tika = new Tika();
     }
 
     /**
      * Upload a file
      *
      * @param file File to upload
+     *
      * @return {@link OwOAction} of type {@link OwOFile}
      *
      * @throws NullPointerException when {@code file} is null
      */
     public OwOAction<OwOFile> upload(@NonNull File file) {
+        return upload(file, null);
+    }
+
+    /**
+     * Upload a file with a specified contentType
+     *
+     * @param file File to upload
+     * @param contentType content type of file
+     *
+     * @return {@link OwOAction} of type {@link OwOFile}
+     *
+     * @throws NullPointerException when {@code file} is null
+     */
+    public OwOAction<OwOFile> upload(@NonNull File file, String contentType) {
         RequestBody filePart;
         try {
-            filePart = RequestBody.create(MediaType.parse(Files.probeContentType(file.toPath())), file);
+            if(contentType == null) {
+                contentType = tika.detect(file);
+            }
+
+            filePart = RequestBody.create(MediaType.parse(contentType), file);
         } catch (IOException e) {
             return new OwOAction<>(e);
         }
