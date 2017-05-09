@@ -8,14 +8,14 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import lombok.NonNull;
 import okhttp3.HttpUrl;
-import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
-import okhttp3.Response;
 import org.apache.tika.Tika;
+import org.apache.tika.io.FilenameUtils;
+import org.apache.tika.io.IOUtils;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
@@ -23,7 +23,8 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.nio.file.Files;
+import java.net.URL;
+import java.net.URLConnection;
 
 public class OwO {
 
@@ -92,7 +93,98 @@ public class OwO {
             return new OwOAction<>(e);
         }
 
-        MultipartBody.Part uploadFile = MultipartBody.Part.createFormData("files[]", file.getName(), filePart);
+        return upload(filePart, file.getName());
+    }
+
+    /**
+     * Upload a file from an url
+     *
+     * @param url File's url
+     *
+     * @return {@link OwOAction} of type {@link OwOFile}
+     *
+     * @throws NullPointerException when {@code file} is null
+     */
+    public OwOAction<OwOFile> upload(@NonNull URL url) {
+        return upload(url, null);
+    }
+
+    /**
+     * Upload a file from an url
+     *
+     * @param url File's url
+     * @param contentType content type of file
+     *
+     * @return {@link OwOAction} of type {@link OwOFile}
+     *
+     * @throws NullPointerException when {@code url} is null
+     */
+    public OwOAction<OwOFile> upload(@NonNull URL url, String contentType) {
+        RequestBody filePart;
+
+        try {
+            URLConnection connection = url.openConnection();
+            connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36");
+
+            byte[] data = IOUtils.toByteArray(connection.getInputStream());
+
+            if(contentType == null) {
+                contentType = tika.detect(data);
+            }
+
+            filePart = RequestBody.create(MediaType.parse(contentType), data);
+        } catch (IOException e) {
+            return new OwOAction<>(e);
+        }
+
+        return upload(filePart, FilenameUtils.getName(url.getPath()));
+    }
+
+    /**
+     * Upload a file from a {@code byte[]}
+     *
+     * @param data data of file
+     * @param fileName name of file
+     *
+     * @return {@link OwOAction} of type {@link OwOFile}
+     *
+     * @throws NullPointerException when {@code data} or {@code fileName} is null
+     */
+    public OwOAction<OwOFile> upload(@NonNull byte[] data, @NonNull String fileName) {
+        return upload(data, fileName, null);
+    }
+
+    /**
+     * Upload a file from a {@code byte[]}
+     *
+     * @param data data of file
+     * @param fileName name of file
+     * @param contentType content type of file
+     *
+     * @return {@link OwOAction} of type {@link OwOFile}
+     *
+     * @throws NullPointerException when {@code data} or {@code fileName} is null
+     */
+    public OwOAction<OwOFile> upload(@NonNull byte[] data, @NonNull String fileName, String contentType) {
+        if(contentType == null) {
+            contentType = tika.detect(data);
+        }
+
+        RequestBody filePart = RequestBody.create(MediaType.parse(contentType), data);
+        return upload(filePart, fileName);
+    }
+
+    /**
+     * Upload file
+     *
+     * @param requestBody file's data to upload
+     * @param fileName file's name
+     * @return {@link OwOAction} of type {@link OwOFile}
+     *
+     * @throws NullPointerException when {@code requestBody} or {@code fileName} is null
+     */
+    private OwOAction<OwOFile> upload(@NonNull RequestBody requestBody, @NonNull String fileName) {
+        MultipartBody.Part uploadFile = MultipartBody.Part.createFormData("files[]", fileName, requestBody);
         return new OwOAction<>(service.upload(uploadFile));
     }
 
