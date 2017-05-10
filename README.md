@@ -1,5 +1,5 @@
 # owo.java
-
+![JProfiler Icon](https://www.ej-technologies.com/images/product_banners/jprofiler_small.png) This API is optimized with the help of [JProfiler, a Java Profiler](https://www.ej-technologies.com/products/jprofiler/overview.html)
 ## OwO What's This?
 This is an API wrapper for <https://whats-th.is/> written in Java. 
 This wrapper requires Java 7 or above (currently separate versions for Java 7 and 8 are available) to function,
