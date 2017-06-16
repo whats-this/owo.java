@@ -1,0 +1,15 @@
+machine:
+  java:
+    version: oraclejdk7
+general:
+  artifacts:
+    - "build/libs/*.jar"
+dependencies:
+    override:
+        - chmod +x gradlew
+        - ./gradlew dependencies
+compile:
+  post:
+    - ./gradlew shadowJar
+    - mkdir -p $CIRCLE_ARTIFACTS/build/libs
+    - cp build/libs/* $CIRCLE_ARTIFACTS/build/libs
