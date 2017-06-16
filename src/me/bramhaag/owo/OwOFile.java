@@ -10,6 +10,7 @@
 
 package me.bramhaag.owo;
 
+import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
 
 public class OwOFile {
@@ -25,12 +26,30 @@ public class OwOFile {
     @Getter private String name;
 
     /**
-     * URL of file. This
+     * Key of URL which can be found at the end of the URL
+     * For example: filename.extension
      */
     @Getter private String url;
+
+    /**
+     * Get full URL
+     * For example: https://owo.whats-th.is/filename.extension
+     */
+    @Getter private String fullUrl;
 
     /**
      * Size of file
      */
     @Getter private long size;
+
+    /**
+     * Set fullUrl
+     * @param uploadUrl URL to display before key
+     */
+    OwOFile setFullUrl(String uploadUrl) {
+        uploadUrl = uploadUrl.endsWith("/") ? uploadUrl : uploadUrl + "/";
+        fullUrl = uploadUrl + url;
+
+        return this;
+    }
 }

@@ -11,12 +11,11 @@
 package me.bramhaag.owo;
 
 import lombok.NonNull;
+import me.bramhaag.owo.util.Consumer;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.HttpException;
 import retrofit2.Response;
-
-import java.util.function.Consumer;
 
 public class OwOAction<T> {
 
@@ -77,6 +76,11 @@ public class OwOAction<T> {
         call.enqueue(callback);
     }
 
+    /**
+     * Execute {@link OwOAction} of type {@link T} on the current thread
+     * @return response of type {@link T}
+     * @throws Throwable thrown when an error occurred
+     */
     public T executeSync() throws Throwable {
         if(this.throwable != null) {
             throw throwable;

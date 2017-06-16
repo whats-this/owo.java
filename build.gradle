@@ -1,70 +1,82 @@
 group 'me.bramhaag'
-version '1.1.4-SNAPSHOT'
+version '2.0'
 
 apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'com.github.johnrengelman.shadow'
 
-subprojects {
-    group 'me.bramhaag'
-    version '1.1.4-SNAPSHOT'
+sourceCompatibility = JavaVersion.VERSION_1_7
+targetCompatibility = JavaVersion.VERSION_1_7
 
-    apply plugin: 'java'
-    apply plugin: 'maven'
-
+buildscript {
     repositories {
-        mavenCentral()
+        jcenter()
     }
-
     dependencies {
-        compile 'com.squareup.retrofit2:retrofit:2.2.0'
-        compile 'com.squareup.retrofit2:converter-scalars:2.2.0'
-        compile 'com.squareup.retrofit2:converter-gson:2.2.0'
-        compile 'com.google.code.gson:gson:2.8.0'
-        compile 'org.apache.tika:tika-core:1.14'
-
-        compileOnly "org.projectlombok:lombok:1.16.14"
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.4'
     }
+}
 
-    sourceSets {
-        main {
-            java {
-                srcDir 'src'
-            }
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'com.squareup.retrofit2:retrofit:2.2.0'
+    compile 'com.squareup.retrofit2:converter-scalars:2.2.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.2.0'
+    compile 'com.google.code.gson:gson:2.8.0'
+
+    compileOnly "org.projectlombok:lombok:1.16.14"
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src'
         }
     }
+}
 
-    task javadocJar(type: Jar, dependsOn: javadoc) {
-        from sourceSets.main.allJava
-        classifier = 'javadoc'
-    }
+//Maven soon(tm)
+/*task javadocJar(type: Jar, dependsOn: javadoc) {
+    from sourceSets.main.allJava
+    classifier = 'javadoc'
+}
 
-    task sourcesJar(type: Jar) {
-        classifier = 'sources'
-        from sourceSets.main.allSource
-    }
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
 
-    artifacts {
-        archives jar
+artifacts {
+    archives jar
 
-        archives javadocJar
-        archives sourcesJar
-    }
+    archives javadocJar
+    archives sourcesJar
+}
 
-    uploadArchives {
-        repositories {
-            mavenDeployer {
-                repository(url: "${nexusUrl}/repository/maven-releases/") {
-                    authentication(userName: nexusUsername, password: nexusPassword)
-                }
-                snapshotRepository(url: "${nexusUrl}/repository/maven-snapshots") {
-                    authentication(userName: nexusUsername, password: nexusPassword)
-                }
-
-                addFilter('jre7') { artifact, file -> artifact.name == 'jre7' }
-                addFilter('jre8') { artifact, file -> artifact.name == 'jre8' }
-
-                pom('jre7').artifactId = 'owo-java-jre7'
-                pom('jre8').artifactId = 'owo-java-jre8'
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: "https://api.bintray.com/maven/${bintray_user}/maven/owo.java/") {
+                authentication(userName: bintray_user, password: bintray_api_key)
             }
+            //snapshotRepository(url: "${nexus_url}/repository/maven-snapshots") {
+            //    authentication(userName: nexus_username, password: nexus_password)
+            //}
+
+            addFilter('jre7') { artifact, file -> artifact.name == 'jre7' }
+            addFilter('jre8') { artifact, file -> artifact.name == 'jre8' }
+
+            pom('jre7').artifactId = 'owo-java-jre7'
+            pom('jre8').artifactId = 'owo-java-jre8'
         }
+    }
+}*/
+
+jar {
+    manifest {
+        attributes 'Implementation-Version': version
     }
 }
