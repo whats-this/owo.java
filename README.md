@@ -8,32 +8,26 @@ with Android (Minimum version is Marshmallow, because of Java 7).
 
 
 ### Download
+> Replace `VERSION` with a specific version. The latest version can be found at
+> the top of the readme
 Maven:
 ```xml
-<repositories>
-    <repository>
-        <id>bramhaag</id>
-        <url>http://bramhagens.me:8081/repository/maven-public/</url>
-    </repository>
-</repositories>
-
 <dependencies>
     <dependency>
-        <groupId>me.bramhaag</groupId>
-        <artifactId>owo-java</artifactId>
-        <version>2.0-SNAPSHOT</version>
+      <groupId>me.bramhaag</groupId>
+      <artifactId>owo-java</artifactId>
+      <version>VERSION</version>
     </dependency>
 </dependencies>
 ```
 Gradle:
 ```groovy
 repositories {
-    maven { url "http://bramhagens.me:8081/repository/maven-public/" }
+    jcenter()
 }
 
 dependencies {
-    //Note that you can also use owo-java-jre7 if you're running on Java 7
-    compile 'me.bramhaag:owo-java:2.0-SNAPSHOT'
+    compile 'me.bramhaag:owo-java:VERSION'
 }
 ```
 
@@ -61,7 +55,8 @@ OwO owo = new OwO.Builder()
 
 Next, we can use our newly created `owo` object to upload files and shorten urls
 > `OwO#upload` and `OwO#shorten` both return `OwoAction`s, these can be executed
-> async using the `execute` method, but can also be executed sync using the `executeSync` method
+> async using the `execute` method, but can also be executed sync using the
+> `executeSync` method
 ```java
 owo.upload(new UploadBuilder().setFile(myFile)).execute(file -> System.out.println("Image URL: " + file.getUrl()));
 owo.shorten("http://my-domain.com").execute(url -> System.out.println("Shortened link: " + url));
@@ -74,6 +69,16 @@ owo.upload(new UploadBuilder().setFile(myFile)).execute(file -> System.out.print
 owo.shorten("http://my-domain.com").execute(url -> System.out.println("Shortened link: " + url), throwable -> throwable.printStackTrace());
 ```
 
+`upload` and `shorten` can also be called statically, but due to performance
+issues creating a `Builder` and using the `OwO` option it returns is a better
+option.
+> These methods also return a `OwOAction`, meaning that the results and errors
+> are handled in the same way as shown above. 
+```java
+OwO.upload("TOKEN", new UploadBuilder().setFile(myFile)) ...
+OwO.shorten("TOKEN", "http://my-domain.com/") ...
+```
+
 ## How to build
 ##### With dependencies
 1. Run `gradlew shadowJar` in project's root.
@@ -84,9 +89,7 @@ owo.shorten("http://my-domain.com").execute(url -> System.out.println("Shortened
 
 ### Contributing
 
-Pull requests are accepted. Make sure you add test suites for new features and
-make sure the code passes the spec (so the build does not break). Tests are
-automatically run when commits are made in a pull request.
+Pull requests are accepted, but please make sure your code actually works.
 
 ### License
 

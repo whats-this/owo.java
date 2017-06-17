@@ -33,14 +33,6 @@ dependencies {
     compileOnly "org.projectlombok:lombok:1.16.14"
 }
 
-sourceSets {
-    main {
-        java {
-            srcDir 'src'
-        }
-    }
-}
-
 jar {
     manifest {
         attributes 'Implementation-Version': version
