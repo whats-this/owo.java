@@ -1,7 +1,6 @@
 # owo.java
 
-Badges go here in one line for the master branch ONLY. Badges can also go in the
-header line.
+[ ![Download](https://api.bintray.com/packages/bramhaag/maven/owo.java/images/download.svg) ](https://bintray.com/bramhaag/maven/owo.java/_latestVersion) [![CircleCI](https://circleci.com/gh/bramhaag/owo.java/tree/master.svg?style=svg)](https://circleci.com/gh/bramhaag/owo.java/tree/master)
 
 This is an API wrapper for https://whats-th.is/ written in Java. This wrapper 
 requires Java 7 or above to function, it has also been confirmed working 
