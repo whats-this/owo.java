@@ -8,32 +8,26 @@ with Android (Minimum version is Marshmallow, because of Java 7).
 
 
 ### Download
+> Replace `VERSION` with a specific version. The latest version can be found at
+> the top of the readme
 Maven:
 ```xml
-<repositories>
-    <repository>
-        <id>bramhaag</id>
-        <url>http://bramhagens.me:8081/repository/maven-public/</url>
-    </repository>
-</repositories>
-
 <dependencies>
     <dependency>
-        <groupId>me.bramhaag</groupId>
-        <artifactId>owo-java</artifactId>
-        <version>2.0-SNAPSHOT</version>
+      <groupId>me.bramhaag</groupId>
+      <artifactId>owo-java</artifactId>
+      <version>VERSION</version>
     </dependency>
 </dependencies>
 ```
 Gradle:
 ```groovy
 repositories {
-    maven { url "http://bramhagens.me:8081/repository/maven-public/" }
+    jcenter()
 }
 
 dependencies {
-    //Note that you can also use owo-java-jre7 if you're running on Java 7
-    compile 'me.bramhaag:owo-java:2.0-SNAPSHOT'
+    compile 'me.bramhaag:owo-java:VERSION'
 }
 ```
 
@@ -61,7 +55,8 @@ OwO owo = new OwO.Builder()
 
 Next, we can use our newly created `owo` object to upload files and shorten urls
 > `OwO#upload` and `OwO#shorten` both return `OwoAction`s, these can be executed
-> async using the `execute` method, but can also be executed sync using the `executeSync` method
+> async using the `execute` method, but can also be executed sync using the
+> `executeSync` method
 ```java
 owo.upload(new UploadBuilder().setFile(myFile)).execute(file -> System.out.println("Image URL: " + file.getUrl()));
 owo.shorten("http://my-domain.com").execute(url -> System.out.println("Shortened link: " + url));
