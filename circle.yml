@@ -13,4 +13,4 @@ compile:
     - ./gradlew shadowJar
     - mkdir -p $CIRCLE_ARTIFACTS/build/libs
     - cp build/libs/* $CIRCLE_ARTIFACTS/build/libs
-    - ./gradlew bintrayUpload --stacktrace
+    - if [ $CIRCLE_BRANCH = 'master' ]; then ./gradlew bintrayUpload --stacktrace; fi
