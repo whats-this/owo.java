@@ -7,9 +7,13 @@ import lombok.NonNull;
  * result. Unlike most other functional interfaces, {@code Consumer} is expected
  * to operate via side-effects.
  *
+ * This is a Java 7 backport of Java 8's Consumer class.
+ *
  * @param <T> the type of the input to the operation
  *
  */
+
+//Imaginary @FunctionalInterface annotation here :<
 public interface Consumer<T> {
 
     /**

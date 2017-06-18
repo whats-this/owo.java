@@ -10,27 +10,32 @@
 
 package me.bramhaag.owo;
 
-import lombok.Getter;
+import okhttp3.MultipartBody;
+import retrofit2.Call;
+import retrofit2.http.GET;
+import retrofit2.http.Multipart;
+import retrofit2.http.POST;
+import retrofit2.http.Part;
+import retrofit2.http.Query;
 
-public class OwOFile {
-
-    /**
-     * Hash of file
-     */
-    @Getter private String hash;
-
-    /**
-     * Original name of uploaded file
-     */
-    @Getter private String name;
+public interface OwOService {
 
     /**
-     * URL of file. This
+     * Upload a file to the {@code /upload/pomf} endpoint
+     *
+     * @param file File to upload
+     * @return {@link Call} of type {@link OwOFile}
      */
-    @Getter private String url;
+    @Multipart
+    @POST("upload/pomf")
+    Call<OwOFile> upload(@Part MultipartBody.Part file);
 
     /**
-     * Size of file
+     * Shorten link using the {@code /shorten/polr} endpoint
+     *
+     * @param url URL to shorten
+     * @return {@link Call} of type {@link String}
      */
-    @Getter private long size;
+    @GET("shorten/polr?action=shorten")
+    Call<String> shorten(@Query("url") String url, @Query("resultUrl") String resultUrl);
 }

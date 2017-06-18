@@ -2,8 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jre7/jre7.iml" filepath="$PROJECT_DIR$/.idea/modules/jre7/jre7.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jre8/jre8.iml" filepath="$PROJECT_DIR$/.idea/modules/jre8/jre8.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/owo-java.iml" filepath="$PROJECT_DIR$/.idea/modules/owo-java.iml" />
     </modules>
   </component>

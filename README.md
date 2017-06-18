@@ -1,86 +1,97 @@
 # owo.java
-![JProfiler Icon](https://www.ej-technologies.com/images/product_banners/jprofiler_small.png) This API is optimized with the help of [JProfiler, a Java Profiler](https://www.ej-technologies.com/products/jprofiler/overview.html) 
 
-Latest Build: [ ![Download](https://api.bintray.com/packages/bramhaag/maven/owo.java/images/download.svg) ](https://bintray.com/bramhaag/maven/owo.java/_latestVersion)
-## OwO What's This?
-This is an API wrapper for <https://whats-th.is/> written in Java. 
-This wrapper requires Java 7 or above (currently separate versions for Java 7 and 8 are available) to function,
-it has also been confirmed working with Android (Minimum version is Marshmallow, because of Java 7).
+[ ![Download](https://api.bintray.com/packages/bramhaag/maven/owo.java/images/download.svg) ](https://bintray.com/bramhaag/maven/owo.java/_latestVersion) [![CircleCI](https://circleci.com/gh/bramhaag/owo.java/tree/master.svg?style=svg)](https://circleci.com/gh/bramhaag/owo.java/tree/master)
 
-## Usage
-To start, create a new OwO object
-```java
-//Create a new OwO object, these objects can be reused.
-OwO owo = new OwO("YOUR-TOKEN-HERE");
-```
+This is an API wrapper for https://whats-th.is/ written in Java. This wrapper 
+requires Java 7 or above to function, it has also been confirmed working 
+with Android (Minimum version is Marshmallow, because of Java 7).
 
-With this OwO object, you can shorten links and uploading files, simply by doing
-```java
-owo.shorten("http://my_domain.com");
-owo.upload(new File("my_image.png"));
-```
-These methods return an `OwOAction<T>`. This means that the action has been prepared, but has not been send yet.
-There are multiple ways to send this action, they can be send sync, async and with or without error handling.
-```java
-//Sync (These methods *can* throw errors, so you'll need to surround them with a try catch block)
-String url = owo.shorten("http://my_domain.com").executeSync();
-OwOFile file = owo.upload(new File("my_image.png")).executeSync();
 
-//Async (no error handling)
-owo.shorten("http://my_domain.com").execute(url -> System.out.println("Shortened link: " + url));
-owo.upload(new File("my_image.png")).execute(file -> System.out.println("Image URL: " + file.getUrl()));
-
-//Async (with error handling)
-owo.shorten("http://my_domain.com").execute(url -> System.out.println("Shortened link: " + url), throwable -> /* handle error */);
-owo.upload(new File("my_image.png")).execute(file -> System.out.println("Image URL: " + file.getUrl()), throwable -> /* handle error */);
-```
-
-## Download
+### Download
+> Replace `VERSION` with a specific version. The latest version can be found at
+> the top of the readme
 Maven:
 ```xml
-<repositories>
-    <repository>
-        <id>bramhaag</id>
-        <url>http://bramhagens.me:8081/repository/maven-public/</url>
-    </repository>
-</repositories>
-
 <dependencies>
     <dependency>
-        <groupId>me.bramhaag</groupId>
-        <!-- Note that you can also use owo-java-jre7 if you're running on Java 7 -->
-        <artifactId>owo-java-jre8</artifactId>
-        <version>1.1-SNAPSHOT</version>
+      <groupId>me.bramhaag</groupId>
+      <artifactId>owo-java</artifactId>
+      <version>VERSION</version>
     </dependency>
 </dependencies>
 ```
 Gradle:
 ```groovy
 repositories {
-    maven { url "http://bramhagens.me:8081/repository/maven-public/" }
+    jcenter()
 }
 
 dependencies {
-    //Note that you can also use owo-java-jre7 if you're running on Java 7
-    compile 'me.bramhaag:owo-java-jre8:1.1-SNAPSHOT'
+    compile 'me.bramhaag:owo-java:VERSION'
 }
 ```
 
 Or you can build the jar yourself (see below)
 
+### Usage
+
+To get started, create an `OwO` object using the Builder class.
+
+> `REQUIRED` `TOKEN` should be replaced with your own unique OwO API key  
+> `(OPTIONAL)` You can set `endpoint` to use a custom endpoint, default
+> endpoint is `https://api.awau.moe/`  
+> `(OPTIONAL)` You can set `uploadUrl` to use a custom upload url, default
+> upload URL is `https://owo.whats-th.is/`  
+> `(OPTIONAL)` You can set `shortenUrl` to use a custom shorten url, default
+> upload URL is `https://awau.moe/`
+
+```java
+OwO owo = new OwO.Builder()
+                .setKey("TOKEN")
+                .setUploadUrl("https://owo.whats-th.is/")
+                .setShortenUrl("https://thats-a.link/")
+                .build();
+```
+
+Next, we can use our newly created `owo` object to upload files and shorten urls
+> `OwO#upload` and `OwO#shorten` both return `OwoAction`s, these can be executed
+> async using the `execute` method, but can also be executed sync using the
+> `executeSync` method
+```java
+owo.upload(new UploadBuilder().setFile(myFile)).execute(file -> System.out.println("Image URL: " + file.getUrl()));
+owo.shorten("http://my-domain.com").execute(url -> System.out.println("Shortened link: " + url));
+```
+
+This code can throw an exception when something goes wrong, to handle this 
+exception we can add an extra `throwable` argument to the `execute` method
+```java
+owo.upload(new UploadBuilder().setFile(myFile)).execute(file -> System.out.println("Image URL: " + file.getUrl(), throwable -> throwable.printStackTrace()));
+owo.shorten("http://my-domain.com").execute(url -> System.out.println("Shortened link: " + url), throwable -> throwable.printStackTrace());
+```
+
+`upload` and `shorten` can also be called statically, but due to performance
+issues creating a `Builder` and using the `OwO` option it returns is a better
+option.
+> These methods also return a `OwOAction`, meaning that the results and errors
+> are handled in the same way as shown above. 
+```java
+OwO.upload("TOKEN", new UploadBuilder().setFile(myFile)) ...
+OwO.shorten("TOKEN", "http://my-domain.com/") ...
+```
+
 ## How to build
 ##### With dependencies
 1. Run `gradlew shadowJar` in project's root.
-2. The files is located in `jre7/build/lib` and `jre8/build/lib`
+2. The file is located in `build/lib`.
 ##### Without dependencies
-1. Run `gradlew build` in project's root
-2. The files is located in `jre7/build/lib` and `jre8/build/lib` (Note that you will need to supply the dependencies yourself!)
+1. Run `gradlew build` in project's root.
+2. The file is located in `build/lib`.
 
-## Which version to use
-The jre7 version is a port of the jre8 version, this means that it *might* not have all features the jre8 version has, 
-but that is not likely to happen. I do recommend to use the jre8 version, unless you **have** to use Java 7.
+### Contributing
 
+Pull requests are accepted, but please make sure your code actually works.
 
-## TODO
-- ~~Maven repo~~
-- Javadoc
+### License
+
+The contents of this repository are licensed under the MIT license. A
+copy of the MIT license can be found in [LICENSE](https://github.com/bramhaag/owo.java/blob/master/LICENSE).

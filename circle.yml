@@ -1,0 +1,16 @@
+machine:
+  java:
+    version: oraclejdk8
+general:
+  artifacts:
+    - "build/libs/*.jar"
+dependencies:
+    override:
+        - chmod +x gradlew
+        - ./gradlew dependencies
+compile:
+  post:
+    - ./gradlew shadowJar
+    - mkdir -p $CIRCLE_ARTIFACTS/build/libs
+    - cp build/libs/* $CIRCLE_ARTIFACTS/build/libs
+    - if [ $CIRCLE_BRANCH = 'master' ]; then ./gradlew bintrayUpload --stacktrace; fi
