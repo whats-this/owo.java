@@ -10,23 +10,25 @@
 
 package me.bramhaag.owo;
 
-import lombok.NonNull;
 import me.bramhaag.owo.util.Consumer;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.HttpException;
 import retrofit2.Response;
 
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class OwOAction<T> {
 
-    private Call<T> call;
-    private Throwable throwable;
+    @Nullable private Call<T> call;
+    @Nullable private Throwable throwable;
 
-    public OwOAction(Call<T> call) {
+    public OwOAction(@NotNull Call<T> call) {
         this.call = call;
     }
 
-    public OwOAction(Throwable throwable) {
+    public OwOAction(@NotNull Throwable throwable) {
         this.throwable = throwable;
     }
 
@@ -37,7 +39,7 @@ public class OwOAction<T> {
      *
      * @throws NullPointerException when {@code response} is null
      */
-    public void execute(@NonNull Consumer<T> response) {
+    public void execute(@NotNull Consumer<T> response) {
         execute(response, null);
     }
 
@@ -49,7 +51,7 @@ public class OwOAction<T> {
      *
      * @throws NullPointerException when {@code response} is null
      */
-    public void execute(@NonNull final Consumer<T> response, final Consumer<Throwable> throwable) {
+    public void execute(@NotNull final Consumer<T> response, @Nullable final Consumer<Throwable> throwable) {
         Callback<T> callback = new Callback<T>() {
             @Override
             public void onResponse(Call<T> call, Response<T> result) {
@@ -73,6 +75,11 @@ public class OwOAction<T> {
             return;
         }
 
+        if(this.call == null) {
+            callback.onFailure(null, new IllegalStateException("call and throwable are null!"));
+            return;
+        }
+
         call.enqueue(callback);
     }
 
@@ -84,6 +91,10 @@ public class OwOAction<T> {
     public T executeSync() throws Throwable {
         if(this.throwable != null) {
             throw throwable;
+        }
+
+        if(this.call == null) {
+            throw new IllegalStateException("call and throwable are null!");
         }
 
         Response<T> response = call.execute();

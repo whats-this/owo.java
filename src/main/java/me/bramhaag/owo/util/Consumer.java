@@ -1,6 +1,6 @@
 package me.bramhaag.owo.util;
 
-import lombok.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents an operation that accepts a single input argument and returns no
@@ -21,5 +21,5 @@ public interface Consumer<T> {
      *
      * @param t the input argument
      */
-    void accept(@NonNull T t);
+    void accept(@NotNull T t);
 }

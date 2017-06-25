@@ -10,37 +10,35 @@
 
 package me.bramhaag.owo;
 
-import com.google.gson.annotations.SerializedName;
-import lombok.Getter;
-
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class OwOFile {
 
     /**
      * Hash of file
      */
-    @Getter private String hash;
+    private String hash;
 
     /**
      * Original name of uploaded file
      */
-    @Getter private String name;
+    private String name;
 
     /**
      * Key of URL which can be found at the end of the URL
      * For example: filename.extension
      */
-    @Getter private String url;
+    private String url;
 
     /**
      * Get full URL
      * For example: https://owo.whats-th.is/filename.extension
      */
-    @Getter private String fullUrl;
+    private String fullUrl;
 
     /**
      * Size of file
      */
-    @Getter private long size;
+    private long size;
 
     /**
      * Set fullUrl
@@ -51,5 +49,25 @@ public class OwOFile {
         fullUrl = uploadUrl + url;
 
         return this;
+    }
+
+    public String getHash() {
+        return hash;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public String getFullUrl() {
+        return fullUrl;
+    }
+
+    public long getSize() {
+        return size;
     }
 }
