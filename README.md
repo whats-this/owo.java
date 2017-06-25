@@ -58,25 +58,15 @@ Next, we can use our newly created `owo` object to upload files and shorten urls
 > async using the `execute` method, but can also be executed sync using the
 > `executeSync` method
 ```java
-owo.upload(new UploadBuilder().setFile(myFile)).execute(file -> System.out.println("Image URL: " + file.getUrl()));
-owo.shorten("http://my-domain.com").execute(url -> System.out.println("Shortened link: " + url));
+owo.shorten("http://my_domain.com").execute(url -> System.out.println("Shortened link: " + url));
+owo.upload(new File("my_image.png")).execute(file -> System.out.println("Image URL: " + file.getUrl()));
 ```
 
 This code can throw an exception when something goes wrong, to handle this 
 exception we can add an extra `throwable` argument to the `execute` method
 ```java
-owo.upload(new UploadBuilder().setFile(myFile)).execute(file -> System.out.println("Image URL: " + file.getUrl(), throwable -> throwable.printStackTrace()));
-owo.shorten("http://my-domain.com").execute(url -> System.out.println("Shortened link: " + url), throwable -> throwable.printStackTrace());
-```
-
-`upload` and `shorten` can also be called statically, but due to performance
-issues creating a `Builder` and using the `OwO` option it returns is a better
-option.
-> These methods also return a `OwOAction`, meaning that the results and errors
-> are handled in the same way as shown above. 
-```java
-OwO.upload("TOKEN", new UploadBuilder().setFile(myFile)) ...
-OwO.shorten("TOKEN", "http://my-domain.com/") ...
+owo.shorten("http://my_domain.com").execute(url -> System.out.println("Shortened link: " + url), throwable -> /* handle error */);
+owo.upload(new File("my_image.png")).execute(file -> System.out.println("Image URL: " + file.getUrl()), throwable -> /* handle error */);
 ```
 
 ## How to build

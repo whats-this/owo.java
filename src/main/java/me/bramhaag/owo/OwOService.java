@@ -34,6 +34,7 @@ public interface OwOService {
      * Shorten link using the {@code /shorten/polr} endpoint
      *
      * @param url URL to shorten
+     * @param resultUrl shorten url used
      * @return {@link Call} of type {@link String}
      */
     @GET("shorten/polr?action=shorten")

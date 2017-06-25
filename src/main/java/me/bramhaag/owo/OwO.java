@@ -198,6 +198,7 @@ public class OwO {
     /**
      * Upload a {@code byte[]} with a specified filename and {@link OwO#DEFAULT_CONTENT_TYPE} as content type
      * @param data data to upload
+     * @param fileName name of file
      * @return {@link OwOAction} of type {@link OwOFile}
      *
      * @throws NullPointerException if {@code data} is null
@@ -209,6 +210,8 @@ public class OwO {
     /**
      * Upload a {@code byte[]} with a specified filename and content type
      * @param data data to upload
+     * @param fileName name of file
+     * @param contentType content type of data
      * @return {@link OwOAction} of type {@link OwOFile}
      *
      * @throws NullPointerException if {@code data} is null
