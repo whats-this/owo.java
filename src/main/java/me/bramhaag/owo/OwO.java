@@ -65,7 +65,6 @@ public class OwO {
      * @throws NullPointerException if {@code key} is null
      */
     private OwO(@NotNull final String key, @Nullable String endpoint, @Nullable String uploadUrl, @Nullable String shortenUrl) {
-        System.out.println(USER_AGENT);
         this.shortenUrl = shortenUrl;
         this.service = createService(key, endpoint, uploadUrl);
     }
